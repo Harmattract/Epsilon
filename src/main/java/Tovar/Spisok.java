@@ -6,51 +6,52 @@ import java.util.Scanner;
 
 public class Spisok {
 
-    private Node head;
-    private Node tail;
+    private Node Head;
+    private Node Tail;
 
     public Spisok() {
-        head = null;
-        tail = null;
+        Head = null;
+        Tail = null;
     }
 
     private boolean IsEmpty() {
-        return head == null;
+        return Head == null;
     }
 
-    public void AddTovar (Tovar data) {
-        Node temp = new Node(data);
+    public void AddTovar (Tovar Data) {
+        Node temp = new Node();
+        temp.setNext(null);
+        temp.setData(Data);
         if (IsEmpty()) {
-            head = temp;
-            temp.prev = tail;
-            tail = temp;
+            temp.setPrev(null);
+            Head = Tail = temp;
         } else {
-            Node cur = head;
-            int a = temp.data.getID();
-            int b = cur.data.getID();
+            Node cur = Head;
+            int a = temp.getData().getID();
+            int b = cur.getData().getID();
             while (a > b) {
-                if (cur.next == null) {
+                if (cur.getNext() == null) {
                     break;
                 }
-                cur = cur.next;
-                b = cur.data.getID();
+                cur = cur.getNext();
+                b = cur.getData().getID();
             }
             if (a > b) {
-                tail.next = temp;
-                temp.prev = tail;
-                tail = temp; }
+                Tail.setNext(temp);
+                temp.setPrev(Tail);
+                Tail = temp; }
             else if (a == b) {
                 System.out.println("Такой ID уже существует.");
                 return; }
-            else if (cur == head) {
-                head.prev = temp;
-                temp.next = head;
-                head = temp; }
-            else if (cur != head && cur != tail || a < b) {
-                cur.prev.next = temp;
-                temp.prev = cur.prev;
-                cur.prev = temp;
-                temp.next = cur;
+            else if (cur == Head) {
+                Head.setPrev(temp);
+                temp.setNext(Head);
+                Head = temp; }
+            else if (cur != Head && cur != Tail || a < b) {
+                cur.getPrev().setNext(temp);
+                temp.setPrev(cur.getPrev());
+                cur.setPrev(temp);
+                temp.setNext(cur);
             }
         }
     }
@@ -74,24 +75,24 @@ public class Spisok {
             System.out.print("\nВведите ID товара: ");
             i = PrintLine();
             try {
-                temp = head;
-                int b = temp.data.getID();
+                temp = Head;
+                int b = temp.getData().getID();
                 while (Integer.parseInt(i) != b) {
-                    if (temp.next == null) {
-                        b = temp.data.getID();
+                    if (temp.getNext() == null) {
+                        b = temp.getData().getID();
                         break;
                     }
-                    temp = temp.next;
-                    b = temp.data.getID();
+                    temp = temp.getNext();
+                    b = temp.getData().getID();
                 }
                 if (Integer.parseInt(i) != b) {
                     System.out.println("Такого ID не существует.");
                 } else {
-                    System.out.println("Расчёт стоимости для товара: " + temp.data.getName());
-                    System.out.println("Единица товара стоит: " + temp.data.getPrice());
-                    x = temp.data.getPrice()-temp.data.getPrice()*temp.data.getDisc()/100;
-                    if (x != temp.data.getPrice()) {
-                        System.out.println("Скидка на товар: " + temp.data.getDisc());
+                    System.out.println("Расчёт стоимости для товара: " + temp.getData().getName());
+                    System.out.println("Единица товара стоит: " + temp.getData().getPrice());
+                    x = temp.getData().getPrice()-temp.getData().getPrice()*temp.getData().getDisc()/100;
+                    if (x != temp.getData().getPrice()) {
+                        System.out.println("Скидка на товар: " + temp.getData().getDisc());
                         System.out.println("С учётом скидки: " + x);
                     }
                     break;
@@ -107,10 +108,10 @@ public class Spisok {
                 if (Integer.parseInt(i) < 0) {
                     System.out.println("Вы ввели отрицательное число.");
                 } else {
-                    x = (temp.data.getPrice()*Integer.parseInt(i))-(temp.data.getPrice()*Integer.parseInt(i)*temp.data.getDisc()/100);
-                    System.out.println("Товар " + temp.data.getName() + " в количестве " + i + " будет стоить " + x + " рублей");
-                    if (Integer.parseInt(i) > temp.data.getBalance()) {
-                        System.out.println("Предупреждаем, что у нас " + temp.data.getBalance() + " единиц товара на складе."); }
+                    x = (temp.getData().getPrice()*Integer.parseInt(i))-(temp.getData().getPrice()*Integer.parseInt(i)*temp.getData().getDisc()/100);
+                    System.out.println("Товар " + temp.getData().getName() + " в количестве " + i + " будет стоить " + x + " рублей");
+                    if (Integer.parseInt(i) > temp.getData().getBalance()) {
+                        System.out.println("Предупреждаем, что у нас " + temp.getData().getBalance() + " единиц товара на складе."); }
                 }
                 break;
             } catch (Exception e) {
@@ -130,30 +131,30 @@ public class Spisok {
             System.out.print("\nВведите ID товара для добавления в корзину: ");
             i = PrintLine();
             try {
-                temp = head;
-                int b = temp.data.getID();
+                temp = Head;
+                int b = temp.getData().getID();
                 while (Integer.parseInt(i) != b) {
-                    if (temp.next == null) {
-                        b = temp.data.getID();
+                    if (temp.getNext() == null) {
+                        b = temp.getData().getID();
                         break;
                     }
-                    temp = temp.next;
-                    b = temp.data.getID();
+                    temp = temp.getNext();
+                    b = temp.getData().getID();
                 }
                 if (Integer.parseInt(i) != b) {
                     System.out.println("Такого ID не существует.");
-                } else if (temp.data.getBalance() == 0) {
-                    System.out.println("Товар " + temp.data.getName() + ", к сожалению, закончился. Выберите другой товар.");
+                } else if (temp.getData().getBalance() == 0) {
+                    System.out.println("Товар " + temp.getData().getName() + ", к сожалению, закончился. Выберите другой товар.");
                 } else {
-                    System.out.println("Вы выбрали товар: " + temp.data.getName());
+                    System.out.println("Вы выбрали товар: " + temp.getData().getName());
                     break;
                 }
             } catch (Exception e) {
                 System.out.println("Одна ошибка - и ты ошибся!");
             }
         }
-        if (temp.data.getRezerv() != 0) {
-            System.out.println("Подсказка: в данный момент вы зарезервировали " + temp.data.getRezerv() + " единиц товара.");
+        if (temp.getData().getRezerv() != 0) {
+            System.out.println("Подсказка: в данный момент вы зарезервировали " + temp.getData().getRezerv() + " единиц товара.");
             System.out.println("Для удаления товара из корзины введите 0.");
         }
         while (true) {
@@ -162,17 +163,17 @@ public class Spisok {
             try {
                 if (Integer.parseInt(i) < 0) {
                     System.out.println("Вы ввели отрицательное число.");
-                } else if (Integer.parseInt(i) > temp.data.getBalance()) {
-                    System.out.println("На складе нет столько товаров. Сейчас на складе " + temp.data.getBalance() + " единиц товара.");
-                } else if (Integer.parseInt(i) == 0 && temp.data.getRezerv() != 0) {
-                    temp.data.setRezerv(Integer.parseInt(i));
+                } else if (Integer.parseInt(i) > temp.getData().getBalance()) {
+                    System.out.println("На складе нет столько товаров. Сейчас на складе " + temp.getData().getBalance() + " единиц товара.");
+                } else if (Integer.parseInt(i) == 0 && temp.getData().getRezerv() != 0) {
+                    temp.getData().setRezerv(Integer.parseInt(i));
                     System.out.println("Товар удалён.");
                     break;
-                } else if (Integer.parseInt(i) == 0 && temp.data.getRezerv() == 0) {
+                } else if (Integer.parseInt(i) == 0 && temp.getData().getRezerv() == 0) {
                     System.out.println("Товар не добавлен.");
                     break;
                 } else {
-                    temp.data.setRezerv(Integer.parseInt(i));
+                    temp.getData().setRezerv(Integer.parseInt(i));
                     System.out.println("Товар зарезервирован.");
                     break;
                 }
@@ -187,33 +188,33 @@ public class Spisok {
             System.out.println("Ошибка. Товары отсутствуют.");
             return;
         }
-        Node temp = head;
-        while (temp != tail) {
-            temp.data.setRezerv(0);
-            temp = temp.next;
+        Node temp = Head;
+        while (temp != Tail) {
+            temp.getData().setRezerv(0);
+            temp = temp.getNext();
         }
-        temp.data.setRezerv(0);
+        temp.getData().setRezerv(0);
     }
 
     public String PrintSpisok() {
         if (IsEmpty()) {
             return "\nОшибка. Товары отсутствуют.";
         }
-        Node temp = head;
+        Node temp = Head;
         double x;
         String msg = "";
         while (temp != null) {
-            msg += "\n\nID: " + temp.data.getID() + "       Наименование товара: " + temp.data.getName() +
-                    "\nКатегория: " + temp.data.getCath() + "     Цена: " + temp.data.getPrice() + " руб" +
-                    "\nКоличество: " + temp.data.getBalance() + " шт.     Рейтинг: " + temp.data.getRate() + "/5     Скидка: " + temp.data.getDisc() + "%";
-            x = temp.data.getPrice()-temp.data.getPrice()*temp.data.getDisc()/100;
-            if (temp.data.getPrice() != x) {
+            msg += "\n\nID: " + temp.getData().getID() + "       Наименование товара: " + temp.getData().getName() +
+                    "\nКатегория: " + temp.getData().getCath() + "     Цена: " + temp.getData().getPrice() + " руб" +
+                    "\nКоличество: " + temp.getData().getBalance() + " шт.     Рейтинг: " + temp.getData().getRate() + "/5     Скидка: " + temp.getData().getDisc() + "%";
+            x = temp.getData().getPrice()-temp.getData().getPrice()*temp.getData().getDisc()/100;
+            if (temp.getData().getPrice() != x) {
                 msg += "\nЦена с учётом скидки: " + x;
             }
-            temp = temp.next;
+            temp = temp.getNext();
         }
         if (msg.equals("")) {
-            return "Товары отсутствуют";
+            return "Товары отсутствуют.";
         } else {
             return msg;
         }
@@ -223,17 +224,17 @@ public class Spisok {
         if (IsEmpty()) {
             return "\nОшибка. Товары отсутствуют.";
         }
-        Node temp = head;
+        Node temp = Head;
         double x, FinalPrice = 0f;
         String msg = "";
         while (temp != null) {
-            if (temp.data.getRezerv() != 0) {
-                msg += "\nID: " + temp.data.getID() + "     Товар: " + temp.data.getName() + "     В корзине: " + temp.data.getRezerv();
-                x = (temp.data.getPrice()*temp.data.getRezerv())-(temp.data.getPrice()*temp.data.getRezerv()*temp.data.getDisc()/100);
+            if (temp.getData().getRezerv() != 0) {
+                msg += "\nID: " + temp.getData().getID() + "     Товар: " + temp.getData().getName() + "     В корзине: " + temp.getData().getRezerv();
+                x = (temp.getData().getPrice()*temp.getData().getRezerv())-(temp.getData().getPrice()*temp.getData().getRezerv()*temp.getData().getDisc()/100);
                 msg += "\nСтоимость: " + x;
                 FinalPrice += x;
             }
-            temp = temp.next;
+            temp = temp.getNext();
         }
         if (msg.equals("")) {
             return "В корзине нет товаров.";
@@ -264,15 +265,15 @@ public class Spisok {
             System.out.print("\nВведите ID товара для изменений на складе: ");
             i = PrintLine();
             try {
-                temp = head;
-                int b = temp.data.getID();
+                temp = Head;
+                int b = temp.getData().getID();
                 while (Integer.parseInt(i) != b) {
-                    if (temp.next == null) {
-                        b = temp.data.getID();
+                    if (temp.getNext() == null) {
+                        b = temp.getData().getID();
                         break;
                     }
-                    temp = temp.next;
-                    b = temp.data.getID();
+                    temp = temp.getNext();
+                    b = temp.getData().getID();
                 }
                 if (Integer.parseInt(i) != b) {
                     System.out.println("Такого ID не существует.");
@@ -283,26 +284,26 @@ public class Spisok {
                 System.out.println("Одна ошибка - и ты ошибся!");
             }
         }
-        System.out.println("Идут изменения на складе для товара: " + temp.data.getName());
-        System.out.println("В данный момент количество товара равно: " + temp.data.getBalance());
+        System.out.println("Идут изменения на складе для товара: " + temp.getData().getName());
+        System.out.println("В данный момент количество товара равно: " + temp.getData().getBalance());
         System.out.println("Подсказка: для списания товара введите отрицательное число.");
         while (true) {
             System.out.print("\nВведите количество добавляемого (или списываемого) товара: ");
             i = PrintLine();
             try {
                 if (Integer.parseInt(i) == 0) {
-                    System.out.println("Изменений нет. На складе по-прежнему " + temp.data.getBalance() + " единиц товара.");
+                    System.out.println("Изменений нет. На складе по-прежнему " + temp.getData().getBalance() + " единиц товара.");
                     break;
                 } else if (Integer.parseInt(i) > 0) {
-                    temp.data.setBalance(temp.data.getBalance() + Integer.parseInt(i));
-                    System.out.println("На складе теперь " + temp.data.getBalance() + " единиц товара.");
+                    temp.getData().setBalance(temp.getData().getBalance() + Integer.parseInt(i));
+                    System.out.println("На складе теперь " + temp.getData().getBalance() + " единиц товара.");
                     break;
                 } else {
-                    if (temp.data.getBalance() == 0) {
+                    if (temp.getData().getBalance() == 0) {
                         System.out.println("Ты издеваешься?");
-                    } else if (Integer.parseInt(i) + temp.data.getBalance() >= 0) {
-                        temp.data.setBalance(temp.data.getBalance() + Integer.parseInt(i));
-                        System.out.println("На складе теперь " + temp.data.getBalance() + " единиц товара.");
+                    } else if (Integer.parseInt(i) + temp.getData().getBalance() >= 0) {
+                        temp.getData().setBalance(temp.getData().getBalance() + Integer.parseInt(i));
+                        System.out.println("На складе теперь " + temp.getData().getBalance() + " единиц товара.");
                         break;
                     } else {
                         System.out.println("Ну это уже перебор, пацанчик. На складе нет столько.");
@@ -330,22 +331,22 @@ public class Spisok {
                     "\nЭл. адрес покупателя           tysobaka@mail.ru" +
                     "\nЭл. адрес отправителя         samsobaka@mail.ru" +
                     "\n";
-            Node temp = head;
+            Node temp = Head;
             int i;
             double x, FinalPrice = 0f;
             while (temp != null) {
-                if (temp.data.getRezerv() != 0) {
-                    x = (temp.data.getPrice() * temp.data.getRezerv()) - (temp.data.getPrice() * temp.data.getRezerv() * temp.data.getDisc() / 100);
-                    check +="\n" + temp.data.getName() + "                                  " + temp.data.getRezerv() + " х " + temp.data.getPrice() +
-                            "\nСкидка                                      " + temp.data.getDisc() + "%" +
+                if (temp.getData().getRezerv() != 0) {
+                    x = (temp.getData().getPrice() * temp.getData().getRezerv()) - (temp.getData().getPrice() * temp.getData().getRezerv() * temp.getData().getDisc() / 100);
+                    check +="\n" + temp.getData().getName() + "                                  " + temp.getData().getRezerv() + " х " + temp.getData().getPrice() +
+                            "\nСкидка                                      " + temp.getData().getDisc() + "%" +
                             "\nИтого                                     " + x +
                             "\n";
-                    i = temp.data.getBalance() - temp.data.getRezerv();
-                    temp.data.setBalance(i);
-                    temp.data.setRezerv(0);
+                    i = temp.getData().getBalance() - temp.getData().getRezerv();
+                    temp.getData().setBalance(i);
+                    temp.getData().setRezerv(0);
                     FinalPrice += x;
                 }
-                temp = temp.next;
+                temp = temp.getNext();
             }
             if (FinalPrice >= 1500) {
                 check +="\nДоставка                                    0.0";
