@@ -44,4 +44,32 @@ public class Tovar {
     public float getRate(){return this.Rate;}
     public void setDisc(int Disc){this.Disc = Disc;}
     public int getDisc(){return this.Disc;}
+    public String toString(int n){
+        String msg = "";
+        if (n == 1) {
+            msg +=  "\n\nID: " + ID + "       Наименование товара: " + Name +
+                    "\nКатегория: " + Cath + "     Цена: " + Price + " руб" +
+                    "\nКоличество: " + Balance + " шт.     Рейтинг: " + Rate + "/5     Скидка: " + Disc + "%";
+            double x = Price-Price*Disc/100;
+            if (Price != x) {
+                msg += "\nЦена с учётом скидки: " + x;
+            };
+        } else if (n == 2) {
+            double x;
+            msg += "\nID: " + ID + "     Товар: " + Name + "     В корзине: " + Rezerv;
+            x = (Price*Rezerv)-(Price*Rezerv*Disc/100);
+            msg += "\nСтоимость: " + x;
+        } else if (n == 3) {
+            double x;
+                x = (Price*Rezerv)-(Price*Rezerv*Disc/100);
+                msg +=  "\n" + Name + "                                  " + Rezerv + " х " + Price +
+                        "\nСкидка                                      " + Disc + "%" +
+                        "\nИтого                                     " + x +
+                        "\n";
+                Balance -= Rezerv;
+                Rezerv = 0;
+        }
+        return msg;
+    }
+
 }

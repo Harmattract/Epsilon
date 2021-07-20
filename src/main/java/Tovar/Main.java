@@ -22,13 +22,13 @@ public class Main {
             choose = input.nextLine();
             try {
                 if (Integer.parseInt(choose) == 1) {
-                    System.out.println(list.PrintSpisok());
+                    list.PrintSpisok();
                 } else if (Integer.parseInt(choose) == 2) {
                     list.Calc();
                 } else if (Integer.parseInt(choose) == 3) {
                     list.Rezervate();
                 } else if (Integer.parseInt(choose) == 4) {
-                    System.out.println(list.PrintRezerv());
+                    list.PrintRezerv();
                 } else if (Integer.parseInt(choose) == 5) {
                     list.ClearAll();
                     System.out.println("\nКорзина очищена.");

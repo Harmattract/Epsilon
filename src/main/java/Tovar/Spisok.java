@@ -52,22 +52,16 @@ public class Spisok {
         }
     }
 
-    public String PrintSpisok() {
-        if (IsEmpty()) {return "\nОшибка. Товары отсутствуют.";}
+    public void PrintSpisok() {
+        if (IsEmpty()) {
+            System.out.println("Ошибка. Товары отсутствуют.");
+            return;
+        }
         Node temp = Head;
-        double x;
-        String msg = "";
         while (temp != null) {
-            msg += "\n\nID: " + temp.getData().getID() + "       Наименование товара: " + temp.getData().getName() +
-                    "\nКатегория: " + temp.getData().getCath() + "     Цена: " + temp.getData().getPrice() + " руб" +
-                    "\nКоличество: " + temp.getData().getBalance() + " шт.     Рейтинг: " + temp.getData().getRate() + "/5     Скидка: " + temp.getData().getDisc() + "%";
-            x = temp.getData().getPrice()-temp.getData().getPrice()*temp.getData().getDisc()/100;
-            if (temp.getData().getPrice() != x) {
-                msg += "\nЦена с учётом скидки: " + x;
-            }
+            System.out.println(temp.getData().toString(1));
             temp = temp.getNext();
         }
-        return msg;
     }
 
     public void Calc () {
@@ -99,7 +93,7 @@ public class Spisok {
                     System.out.println("Единица товара стоит: " + temp.getData().getPrice());
                     x = temp.getData().getPrice()-temp.getData().getPrice()*temp.getData().getDisc()/100;
                     if (x != temp.getData().getPrice()) {
-                        System.out.println("Скидка на товар: " + temp.getData().getDisc());
+                        System.out.println("Скидка на товар: " + temp.getData().getDisc() + "%");
                         System.out.println("С учётом скидки: " + x);
                     }
                     break;
@@ -182,34 +176,34 @@ public class Spisok {
         }
     }
 
-    public String PrintRezerv() {
-        if (IsEmpty()) {return "\nОшибка. Товары отсутствуют.";}
+    public void PrintRezerv() {
+        if (IsEmpty()) {
+            System.out.println("Ошибка. Товары отсутствуют.");
+            return;
+        }
         Node temp = Head;
         double x, FinalPrice = 0f;
-        String msg = "";
         while (temp != null) {
             if (temp.getData().getRezerv() != 0) {
-                msg += "\nID: " + temp.getData().getID() + "     Товар: " + temp.getData().getName() + "     В корзине: " + temp.getData().getRezerv();
+                System.out.println(temp.getData().toString(2));
                 x = (temp.getData().getPrice()*temp.getData().getRezerv())-(temp.getData().getPrice()*temp.getData().getRezerv()*temp.getData().getDisc()/100);
-                msg += "\nСтоимость: " + x;
                 FinalPrice += x;
             }
             temp = temp.getNext();
         }
-        if (msg.equals("")) {
-            return "В корзине нет товаров.";
+        if (FinalPrice == 0f) {
+            System.out.println("В корзине нет товаров.");
         } else {
             if (FinalPrice >= 1500) {
-                msg += "\nДоставка бесплатно";
+                System.out.println("\nДоставка бесплатно");
             } else if (FinalPrice >= 1000) {
                 FinalPrice += 100f;
-                msg += "\nДоставка 100 рублей";
+                System.out.println("\nДоставка 100 рублей");
             } else {
                 FinalPrice += 200f;
-                msg += "\nДоставка 200 рублей";
+                System.out.println("\nДоставка 200 рублей");
             }
-            msg += "\nИтоговая сумма заказа = " + FinalPrice;
-            return msg;
+            System.out.println("\nИтоговая сумма заказа = " + FinalPrice);
         }
     }
 
@@ -287,8 +281,7 @@ public class Spisok {
     public String Sale () {
         if (IsEmpty()) {return "\nОшибка. Товары отсутствуют.";}
         String check = "";
-        if (!PrintRezerv().equals("В корзине нет товаров.")) {
-
+        if (CheckRezerv() == 1) {
             check +="\nДобро пожаловать в онлайн-магазин 'Рыба и пиво'" +
                     "\n               КАССОВЫЙ ЧЕК №5                 " +
                     "\nПриход                  " + DataTime() +
@@ -300,18 +293,11 @@ public class Spisok {
                     "\n";
             Node temp = Head;
             int i;
-            double x, FinalPrice = 0f;
+            double FinalPrice = 0f;
             while (temp != null) {
                 if (temp.getData().getRezerv() != 0) {
-                    x = (temp.getData().getPrice() * temp.getData().getRezerv()) - (temp.getData().getPrice() * temp.getData().getRezerv() * temp.getData().getDisc() / 100);
-                    check +="\n" + temp.getData().getName() + "                                  " + temp.getData().getRezerv() + " х " + temp.getData().getPrice() +
-                            "\nСкидка                                      " + temp.getData().getDisc() + "%" +
-                            "\nИтого                                     " + x +
-                            "\n";
-                    i = temp.getData().getBalance() - temp.getData().getRezerv();
-                    temp.getData().setBalance(i);
-                    temp.getData().setRezerv(0);
-                    FinalPrice += x;
+                    FinalPrice += (temp.getData().getPrice() * temp.getData().getRezerv()) - (temp.getData().getPrice() * temp.getData().getRezerv() * temp.getData().getDisc() / 100);
+                    check += temp.getData().toString(3);
                 }
                 temp = temp.getNext();
             }
@@ -326,11 +312,23 @@ public class Spisok {
             }
             check +="\n\nИтого                                     " + FinalPrice +
                     "\n               СПАСИБО ЗА ПОКУПКУ!             ";
-        } else {check = "Корзина пуста.";}
+        } else {check = "В корзине нет товаров.";}
         return check;
     }
 
     private boolean IsEmpty() {return Head == null;}
+
+    private int CheckRezerv() {
+        Node temp = Head;
+        int x = 0;
+        while (temp != null) {
+            if (temp.getData().getRezerv() != 0) {
+                x = 1;
+            }
+            temp = temp.getNext();
+        }
+        return x;
+    }
 
     private String PrintLine() {
         String enter;
@@ -344,4 +342,6 @@ public class Spisok {
         LocalTime Time = LocalTime.now();
         return Data + " " + Time;
     }
+
+
 }
