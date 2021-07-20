@@ -295,8 +295,8 @@ public class Spisok {
                     "\nСмена                                       555" +
                     "\nКассир                             Мендаль В.А." +
                     "\nИНН кассира                        482709584816" +
-                    "\nЭл. адрес покупателя           tysobaka@mail.ru" +
-                    "\nЭл. адрес отправителя         samsobaka@mail.ru" +
+                    "\nЭл. адрес покупателя       motherrussia@mail.ru" +
+                    "\nЭл. адрес отправителя         harmatter@mail.ru" +
                     "\n";
             Node temp = Head;
             int i;
