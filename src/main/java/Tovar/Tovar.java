@@ -1,7 +1,5 @@
 package Tovar;
 
-import java.util.Scanner;
-
 public class Tovar {
     private int ID;
     private String Name;
